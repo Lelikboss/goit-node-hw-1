@@ -1,7 +1,6 @@
 const chalk = require('chalk');
 const { Command } = require('commander');
-const {listContacts, addContact, getContactById, removeContact} = require('./contact')
-
+const {listContacts, addContact, getContactById, removeContact} = require('./controllers/contacts/index')
 const program = new Command();
 program
   .requiredOption('-a, --action <type>', 'choose action')
@@ -18,6 +17,7 @@ const invokeAction = async ({ action, id, name, email, phone }) => {
   switch (action) {
     case 'list':
       const contacts = await listContacts()
+      console.log(chalk.bgGray.yellow(' Here\'s a table '));
       console.table(contacts)
       break;
 
@@ -53,4 +53,6 @@ const invokeAction = async ({ action, id, name, email, phone }) => {
   }
 }
 
-invokeAction(argv).then(()=> console.log(chalk.bgBlueBright.black(' Action completed ')));
+(async()=>{
+  await invokeAction(argv)
+})()
